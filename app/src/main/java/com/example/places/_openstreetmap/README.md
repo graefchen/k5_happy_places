@@ -1,4 +1,7 @@
-# Map
+# _openstreetmap (not map or Map)
+
+> [!note]
+> Underscored as I am currently not using it. But it is still here as it is very important.
 
 Some stuff for OpenStreetMap that I either copied and adapted from
 

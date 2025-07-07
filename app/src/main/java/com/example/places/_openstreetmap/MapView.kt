@@ -1,4 +1,4 @@
-package com.example.places.map
+package com.example.places._openstreetmap
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

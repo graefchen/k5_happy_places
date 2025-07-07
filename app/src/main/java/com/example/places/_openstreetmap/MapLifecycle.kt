@@ -1,4 +1,4 @@
-package com.example.places.map
+package com.example.places._openstreetmap
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -10,6 +10,9 @@ import com.example.places.R
 import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.ItemizedIconOverlay
+import org.osmdroid.views.overlay.ItemizedOverlayWithFocus
+import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
@@ -43,6 +46,30 @@ fun rememberMapViewWithLifecycle(clipToOutline: Boolean): MapView {
         MapView.getTileSystem().maxLatitude,
         MapView.getTileSystem().minLatitude, 0
     )
+
+    // Overlay items...
+    // While usable ... I need to implement this better and work around it more.
+    // For example taking the list, and making it rememberable so that the View
+    // always is updated when this function is called, furthermore it might be
+    // a very smart idea to look into `Marker` and how it works, as it it mentioned
+    // somewhere in the Files and it is used in the Composable Library for OSM
+    val items = ArrayList<OverlayItem>()
+    items.add(OverlayItem("Title", "Description", GeoPoint(0, 0)))
+    var overlay = ItemizedOverlayWithFocus<OverlayItem>(
+        items,
+        object : ItemizedIconOverlay.OnItemGestureListener<OverlayItem> {
+            override fun onItemSingleTapUp(index: Int, item: OverlayItem?): Boolean {
+                return true
+            }
+
+            override fun onItemLongPress(index: Int, item: OverlayItem?): Boolean {
+                return false
+            }
+        },
+        context
+    )
+    overlay.setFocusItemsOnTap(true)
+    mapView.overlays.add(overlay)
 
     // Makes MapView follow the lifecycle of this composable
     val lifecycleObserver = rememberMapLifecycleObserver(mapView)

@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
-import com.example.places.map.MapView
+import com.example.places._openstreetmap.MapView
 import com.example.places.ui.theme.PlacesTheme
 import org.osmdroid.config.Configuration
 
@@ -21,6 +21,8 @@ class MainActivity : ComponentActivity() {
 
         // Note: Because we need some permissions from the user... we should "ask" the user
         //       to provide those to us. They shall be added under here.
+        //       Alternative I just ... do not use it and let the user activate it
+        //       by themself, as I am/was not able to implement it.
 
         // Getting the World Map (else it would be a boring tile map)
         // THIS MUST BE HERE ELSE THE TILEMAP IS NOT LOADED
