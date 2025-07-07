@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Marker
 
 /**
  * A composable OpenStreetMap View.
@@ -19,6 +20,8 @@ fun MapView(
     onLoad: ((map: MapView) -> Unit)? = null,
     clipToOutline: Boolean = false
 ) {
+    // Note: Maybe we can high-jack the way Muhammad Utsman did the Markers in their library...
+    //       if we want to do it in our own way
     val mapViewState = rememberMapViewWithLifecycle(clipToOutline)
 
     AndroidView(

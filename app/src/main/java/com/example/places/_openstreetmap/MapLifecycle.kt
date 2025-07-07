@@ -17,7 +17,9 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 @Composable
-fun rememberMapViewWithLifecycle(clipToOutline: Boolean): MapView {
+fun rememberMapViewWithLifecycle(
+    clipToOutline: Boolean
+): MapView {
     val context = LocalContext.current
     val mapView = remember {
         MapView(context).apply {
@@ -52,9 +54,18 @@ fun rememberMapViewWithLifecycle(clipToOutline: Boolean): MapView {
     // For example taking the list, and making it rememberable so that the View
     // always is updated when this function is called, furthermore it might be
     // a very smart idea to look into `Marker` and how it works, as it it mentioned
-    // somewhere in the Files and it is used in the Composable Library for OSM
+    // somewhere in the Files and it is used in the Composable Library for OSM.
+    //
+    // The best would be to remove this for the Markers, mainly because it seems easier.
+    // - https://github.com/osmdroid/osmdroid/wiki/Markers,-Lines-and-Polygons-(Kotlin)#marker
+    // - https://github.com/utsmannn/osm-android-compose/blob/main/docs/marker.md
+    // Additionally we want to orientate us at the solution from Muhammad Utsman and their
+    // "osm-android-compose" library and the way the Marker are handled in there under
+    // the Marker component. Additionally we might go back and edit how the Zoom-Levels
+    // and the Camera are handled to create a better environment for the next person
+    // that needs to reed the code of this library.
     val items = ArrayList<OverlayItem>()
-    items.add(OverlayItem("Title", "Description", GeoPoint(0, 0)))
+    items.add(OverlayItem("Title", "Description", GeoPoint(50.936389, 6.952778)))
     var overlay = ItemizedOverlayWithFocus<OverlayItem>(
         items,
         object : ItemizedIconOverlay.OnItemGestureListener<OverlayItem> {
