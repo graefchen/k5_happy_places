@@ -8,15 +8,17 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.example.places._openstreetmap.MapView
 import com.example.places.ui.theme.PlacesTheme
 import org.osmdroid.config.Configuration
-import org.osmdroid.views.overlay.Marker
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,16 +33,33 @@ class MainActivity : ComponentActivity() {
         // THIS MUST BE HERE ELSE THE TILEMAP IS NOT LOADED
         Configuration.getInstance().load(
             applicationContext,
-            // Note: This deprecated and should be probably be updated later.
+            // Note: This is deprecated and should be probably be updated later.
             PreferenceManager.getDefaultSharedPreferences(applicationContext)
         )
 
         enableEdgeToEdge()
         setContent {
             PlacesTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    // The Floating Action Button, correctly positioned
+                    // because of the Scaffold magic.
+                    // Resource used for it:
+                    // https://briangardner.tech/2020/05/08/compose-floating-action-button.html
+                    floatingActionButton = {
+                        FloatingActionButton(
+                            // The onClick function should either create a new Activity that
+                            // lets you create a new Marker, or a Modal that creates a new Marker
+                            // alternatively it could be made like in the osm-android-compose
+                            // library and how the Marker is handled in that library.
+                            onClick = {},
+                            shape = CircleShape
+                        ) {
+                            Icon(Icons.Filled.Add, "FAB.")
+                        }
+                    }
+                ) { innerPadding ->
                     Column(modifier = Modifier.padding(innerPadding)) {
-                        Text(text = "Hello, World!")
                         MapView(clipToOutline = true)
                     }
                 }
