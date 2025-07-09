@@ -17,17 +17,14 @@ import org.osmdroid.config.Configuration
 
 var mapMarkerLists: List<MapMarker> = listOf<MapMarker>()
 
-const val TAG = "HappyPlaces"
-
 class MainActivity : ComponentActivity() {
-    val db =
-        Room.databaseBuilder(applicationContext, AppDatabase::class.java, "markers")
-            .allowMainThreadQueries().build()
-    var mapMarkerDao = db.mapMarkerDao()
+    lateinit var mapMarkerDao: MapMarkerDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val db = AppDatabase.getDatabase(applicationContext)
+        mapMarkerDao = db.mapMarkerDao()
         // Note: This simply adds a marker to the Map
         // Can be deleted Later.
         mapMarkerDao.insertAll(

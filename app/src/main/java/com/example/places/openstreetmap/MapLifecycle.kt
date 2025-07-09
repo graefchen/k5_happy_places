@@ -6,6 +6,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import com.example.places.AppDatabase
 import com.example.places.R
 import com.example.places.mapMarkerLists
 import org.osmdroid.util.BoundingBox
@@ -63,7 +64,7 @@ fun rememberMapViewWithLifecycle(
     // the Marker component. Additionally we might go back and edit how the Zoom-Levels
     // and the Camera are handled to create a better environment for the next person
     // that needs to reed the code of this library.
-    for (m in mapMarkerLists) {
+    for (m in AppDatabase.getDatabase(context).mapMarkerDao().getAll()) {
         var marker = Marker(mapView)
         marker.position = GeoPoint(m.lat, m.long)
         marker.title = m.title
