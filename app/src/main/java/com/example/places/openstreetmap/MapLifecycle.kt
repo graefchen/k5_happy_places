@@ -1,4 +1,4 @@
-package com.example.places._openstreetmap
+package com.example.places.openstreetmap
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -7,12 +7,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.example.places.R
+import com.example.places.mapMarkerLists
 import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.ItemizedIconOverlay
-import org.osmdroid.views.overlay.ItemizedOverlayWithFocus
-import org.osmdroid.views.overlay.OverlayItem
+import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
@@ -64,23 +63,15 @@ fun rememberMapViewWithLifecycle(
     // the Marker component. Additionally we might go back and edit how the Zoom-Levels
     // and the Camera are handled to create a better environment for the next person
     // that needs to reed the code of this library.
-    val items = ArrayList<OverlayItem>()
-    items.add(OverlayItem("Title", "Description", GeoPoint(50.936389, 6.952778)))
-    var overlay = ItemizedOverlayWithFocus<OverlayItem>(
-        items,
-        object : ItemizedIconOverlay.OnItemGestureListener<OverlayItem> {
-            override fun onItemSingleTapUp(index: Int, item: OverlayItem?): Boolean {
-                return true
-            }
-
-            override fun onItemLongPress(index: Int, item: OverlayItem?): Boolean {
-                return false
-            }
-        },
-        context
-    )
-    overlay.setFocusItemsOnTap(true)
-    mapView.overlays.add(overlay)
+    for (m in mapMarkerLists) {
+        var marker = Marker(mapView)
+        marker.position = GeoPoint(m.lat, m.long)
+        marker.title = m.title
+        marker.subDescription = m.description
+        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+        mapView.overlays.add(marker)
+        mapView.invalidate()
+    }
 
     // Makes MapView follow the lifecycle of this composable
     val lifecycleObserver = rememberMapLifecycleObserver(mapView)
@@ -102,6 +93,8 @@ fun rememberMapViewWithLifecycle(
     return mapView
 }
 
+// Respecting the lifecycle, more information for this under:
+// https://developer.android.com/guide/components/activities/activity-lifecycle
 @Composable
 fun rememberMapLifecycleObserver(mapView: MapView): LifecycleEventObserver =
     remember(mapView) {

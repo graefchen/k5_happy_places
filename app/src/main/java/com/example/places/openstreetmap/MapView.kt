@@ -1,13 +1,15 @@
-package com.example.places._openstreetmap
+package com.example.places.openstreetmap
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.Marker
 
 /**
  * A composable OpenStreetMap View.
+ *
+ * It is to be noted, that this map does not store the current position and zoom when using it.
+ * Note to self: Should I still add it or is that a little bit of overkill for this Android Project?
  * @author Arnau Mora, Simon Jünger
  * @since 2021-12-30, 2025-07-07
  * @param modifier Modifiers to apply to the map.

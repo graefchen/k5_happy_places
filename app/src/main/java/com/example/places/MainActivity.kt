@@ -8,21 +8,49 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
-import com.example.places._openstreetmap.MapView
+import androidx.room.Room
+import com.example.places.openstreetmap.MapView
 import com.example.places.ui.theme.PlacesTheme
 import org.osmdroid.config.Configuration
 
+var mapMarkerLists: List<MapMarker> = listOf<MapMarker>()
+
+const val TAG = "HappyPlaces"
+
 class MainActivity : ComponentActivity() {
+    val db =
+        Room.databaseBuilder(applicationContext, AppDatabase::class.java, "markers")
+            .allowMainThreadQueries().build()
+    var mapMarkerDao = db.mapMarkerDao()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Note: This simply adds a marker to the Map
+        // Can be deleted Later.
+        mapMarkerDao.insertAll(
+            MapMarker(
+                title = "Köln",
+                description = "Die Deutsche Stadt, die für ihr Parfüm bekannt ist.",
+                lat = 50.936389,
+                long = 6.952778
+            ),
+            MapMarker(
+                title = "Universität zu Köln",
+                description = "Die Universität an der wir grade eingeschrieben sind.",
+                lat = 50.928309,
+                long = 6.929363
+            ),
+            MapMarker(
+                title = "Nullpunkt",
+                description = "Das ist null, erwartest du mehr?",
+                lat = 0.0,
+                long = 0.0
+            )
+        )
+        mapMarkerLists = mapMarkerDao.getAll()
 
         // Note: Because we need some permissions from the user... we should "ask" the user
         //       to provide those to us. They shall be added under here.
@@ -42,28 +70,24 @@ class MainActivity : ComponentActivity() {
             PlacesTheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    // The Floating Action Button, correctly positioned
-                    // because of the Scaffold magic.
-                    // Resource used for it:
-                    // https://briangardner.tech/2020/05/08/compose-floating-action-button.html
-                    floatingActionButton = {
-                        FloatingActionButton(
-                            // The onClick function should either create a new Activity that
-                            // lets you create a new Marker, or a Modal that creates a new Marker
-                            // alternatively it could be made like in the osm-android-compose
-                            // library and how the Marker is handled in that library.
-                            onClick = {},
-                            shape = CircleShape
-                        ) {
-                            Icon(Icons.Filled.Add, "FAB.")
-                        }
-                    }
+                    // Resource used for the bar:
+                    // https://developer.android.com/develop/ui/compose/components/app-bars
+                    bottomBar = { BottomBar() },
                 ) { innerPadding ->
                     Column(modifier = Modifier.padding(innerPadding)) {
                         MapView(clipToOutline = true)
                     }
                 }
             }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        // Deleting every thing what is in the DB .. at least for now while we are testing
+        for (marker in mapMarkerDao.getAll()) {
+            mapMarkerDao.delete(marker)
         }
     }
 }
