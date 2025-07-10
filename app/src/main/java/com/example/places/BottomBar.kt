@@ -1,6 +1,7 @@
 package com.example.places
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Add
@@ -21,14 +22,18 @@ fun BottomBar() {
     BottomAppBar(
         actions = {
             // Open the Main Activity
-            IconButton(onClick = {context.startActivity(Intent(context, MainActivity::class.java))}) {
+            IconButton(onClick = {
+                context.startActivity(Intent(context, MainActivity::class.java))
+            }) {
                 // This should have been a Map as an Icon, but getting it into Android
                 // is way harder than expected so it is just the Home Icon
-                Icon(Icons.Outlined.Home, "Map")
+                Icon(Icons.Outlined.Home, "Home")
             }
             // Note: When clicking this Button we should probably open a new
             //       Activity in which we can Manage all the Markers we have added.
-            IconButton(onClick = {}) {
+            IconButton(onClick = {
+                context.startActivity(Intent(context, ListActivity::class.java))
+            }) {
                 Icon(Icons.AutoMirrored.Filled.List, "List")
             }
         },
@@ -42,7 +47,10 @@ fun BottomBar() {
                 // lets you create a new Marker, or a Modal that creates a new Marker
                 // alternatively it could be made like in the osm-android-compose
                 // library and how the Marker is handled in that library.
-                onClick = {},
+                onClick = {
+                    Toast.makeText(context, "Todo: Implement \"Add Marker\" feature", Toast.LENGTH_LONG)
+                        .show()
+                },
                 containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
                 elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
             ) {

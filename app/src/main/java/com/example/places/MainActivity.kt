@@ -20,6 +20,7 @@ var mapMarkerLists: List<MapMarker> = listOf<MapMarker>()
 class MainActivity : ComponentActivity() {
     lateinit var mapMarkerDao: MapMarkerDao
 
+    // TODO: Add TopBar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -85,6 +86,7 @@ class MainActivity : ComponentActivity() {
         // Deleting every thing what is in the DB .. at least for now while we are testing
         for (marker in mapMarkerDao.getAll()) {
             mapMarkerDao.delete(marker)
+            mapMarkerDao.deleteById(marker.id)
         }
     }
 }
