@@ -1,5 +1,28 @@
 # Happy Places App
 
+> [!note]
+> Diese App sollte zwar einen grooßen Teil der Anforderungen erfüllen,
+> da ich aber nach **20+ Stunden** absolut keine Lust mehr darauf habe **ALLE**
+> der restlichen Annforderungen anzuhängen, belasse ich es auf dem aktuellen Stand.
+> Aktuelle (Teil-)Anforderungen die noch fehlen:
+> - Die Orte können nicht bearbeitet und verändert werden.
+> - Die Orte müssen *explizit*  mit Longitude und Latitude deklariert werden.
+> - Die GPS Funktion funktioniert nicht (verdammte 5+ Stunden damit verbracht es zu versuchen...)
+> - Es können keine Fotos hinzugefügt werden.
+>
+> Was ich aber geschafft habe:
+> - Die Orte werden in einer Datenbank gespeichert (Yay!) [hier](./app/src/main/java/com/example/places/MapMarker.kt)
+> - Die Karte ist anstelle von XML eine Android Compose [hier](./app/src/main/java/com/example/places/openstreetmap/MapView.kt)
+> - Die Orte werden auf der Karte angezeigt und es gibt einige andere Einstellungen in der Karte, zudem funktionier die Karte mit dem Android Activity Lifecycle ([was das ist](https://developer.android.com/guide/components/activities/activity-lifecycle)) [hier](./app/src/main/java/com/example/places/openstreetmap/MapLifecycle.kt)
+> - Sonstige Compose Objekte wie die [BottomBar](./app/src/main/java/com/example/places/BottomBar.kt)
+> - Zwei verschiedene Activitys neber der [MainActivity](./app/src/main/java/com/example/places/MainActivity.kt)
+>   1. Die [NewActivity](./app/src/main/java/com/example/places/NewActivity.kt), die einen neuen Ort hinzufügt.
+>   2. Die [ListActivity](./app/src/main/java/com/example/places/ListActivity.kt), die die volle Liste der Orte anzeigt, die man auch Löschen kann.
+>  
+> Die apk-datei ist im apk ornder und kann [hier](./apk) gefunden werden.
+>
+> SJ
+
 Du entwickelst eine Happy Places App für Android mit Kotlin, die es Nutzenden ermöglicht, ihre
 Lieblingsorte zu speichern, auf einer Karte anzuzeigen und mit persönlichen Notizen zu versehen.
 
@@ -47,8 +70,3 @@ Falls du die Grundfunktionen schnell umgesetzt hast, kannst du noch folgende Fea
 
 - [osmdroid](https://github.com/osmdroid/osmdroid) (archiviert & veraltet)
 - ~~[osm-android-compose](https://github.com/utsmannn/osm-android-compose)~~
-
-# TODO
-
-https://sanaebadi97.medium.com/learn-how-to-work-with-osm-map-in-android-app-ac42f933cbd3
-https://github.com/osmdroid/osmdroid/wiki/How-to-use-the-osmdroid-library-(Kotlin)#how-do-i-place-icons-on-the-map-with-a-click-listener
