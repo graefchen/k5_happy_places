@@ -8,7 +8,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.example.places.AppDatabase
 import com.example.places.R
-import com.example.places.mapMarkerLists
 import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
@@ -30,13 +29,11 @@ fun rememberMapViewWithLifecycle(
     // Note: Extract the lines until "lifecycleObserver" into another function/file
     var mLocationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(context), mapView)
     mLocationOverlay.enableMyLocation()
+    // Hacky way to set the center .. but it works
+    mLocationOverlay.enableFollowLocation()
     mapView.overlays.add(mLocationOverlay)
 
     mapView.controller.setZoom(20.0)
-    // while this idea might be cool ... it is somehow flawed
-    // as "mLocationOverlay.myLocation" does NOT return the
-    // correct location ... somehow
-    mapView.controller.setCenter(GeoPoint(50.98957579738558, 7.155953029479965))
 
     // from: https://stackoverflow.com/a/63943996
     mapView.setScrollableAreaLimitDouble(BoundingBox(85.0, 180.0, -85.0, -180.0))

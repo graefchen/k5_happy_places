@@ -35,6 +35,13 @@
             android:launchMode="singleTask"
             android:theme="@style/Theme.Places">
         </activity>
+
+        <activity
+            android:name=".NewActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Places">
+        </activity>
     </application>
 
 </manifest>

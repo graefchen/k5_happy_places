@@ -1,59 +1,41 @@
 package com.example.places
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.preference.PreferenceManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import androidx.room.Room
+import androidx.core.app.ActivityCompat
 import com.example.places.openstreetmap.MapView
 import com.example.places.ui.theme.PlacesTheme
 import org.osmdroid.config.Configuration
 
-var mapMarkerLists: List<MapMarker> = listOf<MapMarker>()
-
 class MainActivity : ComponentActivity() {
-    lateinit var mapMarkerDao: MapMarkerDao
-
-    // TODO: Add TopBar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val db = AppDatabase.getDatabase(applicationContext)
-        mapMarkerDao = db.mapMarkerDao()
-        // Note: This simply adds a marker to the Map
-        // Can be deleted Later.
-        mapMarkerDao.insertAll(
-            MapMarker(
-                title = "Köln",
-                description = "Die Deutsche Stadt, die für ihr Parfüm bekannt ist.",
-                lat = 50.936389,
-                long = 6.952778
-            ),
-            MapMarker(
-                title = "Universität zu Köln",
-                description = "Die Universität an der wir grade eingeschrieben sind.",
-                lat = 50.928309,
-                long = 6.929363
-            ),
-            MapMarker(
-                title = "Nullpunkt",
-                description = "Das ist null, erwartest du mehr?",
-                lat = 0.0,
-                long = 0.0
-            )
-        )
-        mapMarkerLists = mapMarkerDao.getAll()
 
         // Note: Because we need some permissions from the user... we should "ask" the user
         //       to provide those to us. They shall be added under here.
         //       Alternative I just ... do not use it and let the user activate it
         //       by themself, as I am/was not able to implement it.
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions()
+        }
 
         // Getting the World Map (else it would be a boring tile map)
         // THIS MUST BE HERE ELSE THE TILEMAP IS NOT LOADED
@@ -80,13 +62,24 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-        // Deleting every thing what is in the DB .. at least for now while we are testing
-        for (marker in mapMarkerDao.getAll()) {
-            mapMarkerDao.delete(marker)
-            mapMarkerDao.deleteById(marker.id)
+    fun requestPermissions() {
+        val locationPermissionRequest = registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            when {
+                // Precise location access granted.
+                permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {}
+                // Only approximate location access granted.
+                permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {}
+                // No location access granted.
+                else -> {}
+            }
         }
+        locationPermissionRequest.launch(
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+        )
     }
 }

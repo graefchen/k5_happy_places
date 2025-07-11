@@ -49,16 +49,10 @@ interface MapMarkerDao {
     fun getByID(id: Int): MapMarker
 
     /**
-     * Inserting only one [MapMarker] into the [AppDatabase].
-     */
-    @Insert
-    fun insert(mapMarker: MapMarker)
-
-    /**
      * Inserting [MapMarker] into the [AppDatabase].
      */
     @Insert
-    fun insertAll(vararg mapMarkers: MapMarker)
+    fun insert(vararg mapMarkers: MapMarker)
 
     /**
      * Updating an [MapMarker], is automatically handled and uses the [PrimaryKey] of the [MapMarker] Object.

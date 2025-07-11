@@ -12,6 +12,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.InputChip
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
@@ -50,6 +51,7 @@ fun BottomBar() {
                 onClick = {
                     Toast.makeText(context, "Todo: Implement \"Add Marker\" feature", Toast.LENGTH_LONG)
                         .show()
+                    context.startActivity(Intent(context, NewActivity::class.java))
                 },
                 containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
                 elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
